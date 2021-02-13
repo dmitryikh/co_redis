@@ -2,10 +2,10 @@
 
 #include <charconv>
 #include <co/func.hpp>
-#include <co/net/network.hpp>
-#include <co/redis/reply.hpp>
+#include <co/net/tcp.hpp>
 #include <co/redis/command.hpp>
 #include <co/redis/error_code.hpp>
+#include <co/redis/reply.hpp>
 
 namespace co::redis
 {
@@ -17,7 +17,7 @@ class connection
 public:
     static func<result<connection>> connect(const std::string& ip, uint16_t port)
     {
-        auto tcp = co_await co::net::connect(ip, port);
+        auto tcp = co_await co::net::tcp::connect(ip, port);
         if (tcp.is_err())
             co_return tcp.err();
         co_return co::ok(connection{ std::move(tcp.unwrap()) });
