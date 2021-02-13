@@ -104,7 +104,7 @@ private:
                     if (_in_fly.size() >= in_fly_capacity)
                     {
                         co_await _conn.flush().unwrap();
-                        co_await _in_fly_cv.wait([&]() { return _in_fly.size() < in_fly_capacity; });
+                        co_await _in_fly_cv.wait([&]() { return _in_fly.size() < in_fly_capacity; }, token).unwrap();
                     }
 
                     _in_fly.push_back(std::move(req_cmd));
